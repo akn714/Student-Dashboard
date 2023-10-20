@@ -1,1 +1,2 @@
 # Student Dashboard
+Student-Dashboard is a impactfull web portal for college students and faculties. This web portal overcomes gaps between students and faculties and creates transprancy between them. In this web portal students can have track of there previous progress, attendence, internal marks of subjects and results, etc.
