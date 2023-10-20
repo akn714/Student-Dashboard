@@ -18,7 +18,7 @@ Student-Dashboard is not just a web portal; it's a catalyst for academic growth,
 
 * <b>User-Friendly Interface</b>: The portal boasts an intuitive, user-friendly interface, guaranteeing a seamless experience for both students and faculty members.
 
-# Benefits:
+### Benefits:
 
 * <b>Enhanced Communication</b>: Student-Dashboard promotes open and transparent communication between students and faculty, fostering collaboration in the pursuit of academic excellence.
 
