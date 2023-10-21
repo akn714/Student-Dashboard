@@ -12,8 +12,6 @@ Student-Dashboard is not just a web portal; it's a catalyst for academic growth,
 
 * <b>Effortless Data Management</b>: Faculty members can upload attendance records and internal assessment marks, ensuring real-time access for students and eliminating the need for constant follow-ups.
 
-* <b>Student Performance Submission</b>: In a two-way exchange of information, students can easily upload their results from end-semester exams. This feature provides a complete picture of their performance and allows for personalized analysis.
-
 * <b>Data Security</b>: Student-Dashboard prioritizes data security, safeguarding all information to ensure privacy and reliability.
 
 * <b>User-Friendly Interface</b>: The portal boasts an intuitive, user-friendly interface, guaranteeing a seamless experience for both students and faculty members.
@@ -22,8 +20,4 @@ Student-Dashboard is not just a web portal; it's a catalyst for academic growth,
 
 * <b>Enhanced Communication</b>: Student-Dashboard promotes open and transparent communication between students and faculty, fostering collaboration in the pursuit of academic excellence.
 
-* <b>Personalized Insights</b>: With real-time access to academic data, students can receive personalized insights into their performance, allowing them to make informed decisions to improve their educational journey.
-
 * <b>Time Efficiency</b>: Faculty members save time and effort by effortlessly managing attendance records and assessment data on a single platform.
-
-* <b>Improved Accountability</b>: This platform holds both students and faculty members accountable for their roles in the educational process, creating a culture of responsibility.
