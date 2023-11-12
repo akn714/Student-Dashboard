@@ -1,0 +1,16 @@
+{
+    "ENTRIES":{
+        "YEAR": [1,2,3,4],
+        "BRANCH": ["CSE", "EE", "ME", "CE"],
+        "student_id": "Roll Number of the student will be the student_id of the student"
+    },
+    "YEAR":{
+        "BRANCH":{
+            "student_id":{
+                "name":"",
+                "roll_no":"",
+                "cgpa":0.0
+            }
+        }
+    }
+}
