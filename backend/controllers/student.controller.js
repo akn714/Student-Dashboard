@@ -1,5 +1,12 @@
 // functions for backend logic of student role for every perticular route will be written here
 
+// middleware to authorize student
+// middleware to protect private routes from an unauthorized access
+const authorize_student = (req, res, next) => {
+    // if authorized -> next()
+    // else response -> 'action not allowed'
+}
+
 // PRIVATE ROUTES
 const profile = (req, res) => {
     // student profile

@@ -1,5 +1,7 @@
 // student routes here
 
+// TODO : adding middleware to authorize users
+
 // Routes:
 
 // * PRIVATE ROUTES (id -> student id (roll number of student as it is unique))
@@ -15,7 +17,7 @@
 //      * /get-avg-cgpa/[year]              -> returns avg. cgpa per year
 //      * /get-avg-cgpa/[year]/[branch]     -> returns avg. cgpa per branch in a perticular year
 
-const express = requier('express')
+const express = require('express')
 const router = express.Router()
 
 const student_controller = require('../controllers/student.controller')
@@ -27,12 +29,12 @@ router.get('/', (req, res)=>{
 })
 
 // private routes
-router.get('/:id', student_controller.profile)
-router.get('/:id/secrets', student_controller.secrets)
-router.get('/:id/attendence-records', student_controller.attendence_records)
-router.get('/:id/end-sem-result', student_controller.end_sem_result)
-router.get('/:id/assignments', student_controller.assignments)
-router.get('/:id/internal-marks-records', student_controller.internal_marks_records)
+router.get('/:id', student_controller.authorize_student, student_controller.profile)
+router.get('/:id/secrets', student_controller.authorize_student, student_controller.secrets)
+router.get('/:id/attendence-records', student_controller.authorize_student, student_controller.attendence_records)
+router.get('/:id/end-sem-result', student_controller.authorize_student, student_controller.end_sem_result)
+router.get('/:id/assignments', student_controller.authorize_student, student_controller.assignments)
+router.get('/:id/internal-marks-records', student_controller.authorize_student, student_controller.internal_marks_records)
 
 // public routes
 router.get('/get-avg-cgpa/:year', student_controller.get_avg_cgpa_per_year)
