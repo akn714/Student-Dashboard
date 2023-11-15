@@ -7,6 +7,13 @@
 * Managing student and faculty authentication
 * Making a user friendly Interface
 
+### Todo
+* 1st version: user's can visit there profile using '/user/:id'
+* 2nd version: user's can visit there profile uisng '/user/profile', this can be done by implementing sessions
+
+### notes
+* add user id in cookies to append it in private links
+
 ### Technologies
 * Database: MongoDB
 * Frontend: HTML, CSS, JS, React.Js
