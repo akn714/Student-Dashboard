@@ -12,7 +12,7 @@
 * 2nd version: user's can visit there profile uisng '/user/profile', this can be done by implementing sessions
 
 ### notes
-* add user id in cookies to append it in private links
+* add user id in cookies to append it in private links | adding user id in req obj
 
 ### Technologies
 * Database: MongoDB
