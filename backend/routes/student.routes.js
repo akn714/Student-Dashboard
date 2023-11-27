@@ -34,13 +34,16 @@ router.get('/get-avg-cgpa/:year/:branch', student_controller.get_avg_cgpa_per_ye
 
 // private routes
 router.use(student_controller.authorize_student)
-router.get('/:id', student_controller.profile)
-router.get('/:id/secrets', student_controller.secrets)
-router.get('/:id/attendence-records', student_controller.attendence_records)
-router.get('/:id/end-sem-result', student_controller.end_sem_result)
-router.get('/:id/assignments', student_controller.assignments)
-router.get('/:id/internal-marks-records', student_controller.internal_marks_records)
 
+router.get('/', student_controller.profile)
+router.get('/secrets', student_controller.secrets)
+router.get('/attendence-records', student_controller.attendence_records)
+router.get('/end-sem-result', student_controller.end_sem_result)
+router.get('/assignments', student_controller.assignments)
+router.get('/internal-marks-records', student_controller.internal_marks_records)
+
+router.post('/secrets/add', student_controller.add_secret)
+router.post('/end-sem-result/upload', student_controller.upload_end_sem_result)
 
 module.exports = router
 

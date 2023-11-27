@@ -4,7 +4,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 const db_link = process.env.DB_LINK
-mongoose.conncet(db_link)
+mongoose.connect(db_link)
 .then((db)=>{
     console.log('[+] student db connceted')
 })
