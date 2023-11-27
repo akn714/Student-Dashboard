@@ -4,6 +4,7 @@
 // imports
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
+const bcrypt = require('bcrypt')
 const studentModel = require('../models/student.model')
 
 dotenv.config();
@@ -28,12 +29,12 @@ const authorize_student = async (req, res, next) => {
             next();
         }
         else{
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'student not found'
             })
         }
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             error: error
         })
     }
@@ -81,7 +82,8 @@ const secrets = async (req, res) => {
     
         const student = await studentModel.findById(id);
         // implementing encryption and decryption
-        if(password==student.passowrd){
+        let isValid = await bcrypt.compare(password, student.password);
+        if(isValid){
             res.json({
                 message: 'student secrets fetched',
                 data: student.secrets
@@ -112,7 +114,9 @@ const attendence_records = async (req, res) => {
         let id = req.id;
         let student = await studentModel.findById(id);
 
-        let attendence = student.attendence[student.year]
+        // this will return percentage of attendence student had in his previous years
+        // later we will track attendence semester wise
+        let attendence = student.attendence[student.year-1];
         if(attendence){
             res.json({
                 message: 'attendence record fetched',
@@ -120,7 +124,7 @@ const attendence_records = async (req, res) => {
             })
         }
         else{
-            res.json({
+            res.status(404).json({
                 message: "attendence record not found"
             })
         }
@@ -175,7 +179,7 @@ const get_avg_cgpa_per_year_per_branch = (req, res) => {
     // return average cgpa per year per branch
     let year = req.params.year;
     let branch = req.params.branch;
-    
+
     res.json({
         message: 'implementation left'
     })

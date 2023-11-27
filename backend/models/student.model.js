@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
+const crypto = require('crypto')
+const bcrypt = require('bcrypt')
 
 dotenv.config()
 
@@ -53,6 +55,17 @@ const studentSchema = mongoose.Schema({
     },
     sgpa: [Number],
     attendence: [Number]
+})
+
+// hashing | pre hook
+studentSchema.pre('save', async function(){
+    const salt = await bcrypt.genSalt();
+    console.log('[+] salt:', salt);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    console.log(`[+] ${hashedPassword} is hashed password for ${this.password}`);
+
+    // saving hashed password
+    this.password = hashedPassword
 })
 
 const studentModel = mongoose.model('studentSchema', studentSchema)
