@@ -10,6 +10,9 @@
 ### Todo
 * 1st version: user's can visit there profile using '/user/:id'
 * 2nd version: user's can visit there profile uisng '/user/profile', this can be done by implementing sessions
+* Faculties tab in students profile
+  * There will be information of faculties in the branch in which student is enrolled
+  * Information of faculties along with there profile image, subject, post (optional)
 
 ### notes
 * add user id in cookies to append it in private links | adding user id in req obj
