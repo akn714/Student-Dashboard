@@ -22,6 +22,7 @@
   * Faculties can send notifications to there students
   * notifications will be sent to only those students who are in the perticular branch and year
 * Thinking of implementing Blockchain 
+* Feedback section
 
 ### notes
 * add user id in cookies to append it in private links | adding user id in req obj
