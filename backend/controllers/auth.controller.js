@@ -16,6 +16,15 @@ const sendMail = require('../utility/nodemailer')
 dotenv.config();
 let JWT_KEY = process.env.JWT_KEY;
 
+module.exports.get_signup_page = function get_signup_page(req, res){
+    // returning signup page
+}
+
+module.exports.get_login_page = function get_login_page(req, res){
+    // returning login page
+}
+
+
 module.exports.signup = async function signup(req, res){
     try {
         let role = req.body.role;

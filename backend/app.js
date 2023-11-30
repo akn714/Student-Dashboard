@@ -9,7 +9,8 @@ const student_routes = require('./routes/student.routes');
 const faculty_routes = require('./routes/faculty.routes');
 const admin_routes = require('./routes/admin.routes');
 
-const is_student_authentic = require('./controllers/student.controller')
+const { is_student_authentic } = require('./controllers/student.controller');
+const { is_faculty_authentic } = require('./controllers/faculty.controller');
 
 
 // middlewares
