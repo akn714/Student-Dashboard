@@ -11,8 +11,12 @@ dotenv.config();
 let JWT_KEY = process.env.JWT_KEY
 
 function is_student_authentic(token){
-    let payload = jwt.verify(token, JWT_KEY);
-    return payload.payload
+    try {
+        let payload = jwt.verify(token, JWT_KEY);
+        return payload.payload
+    } catch (error) {
+        return false
+    }
 }
 
 // middleware to authorize student
@@ -23,8 +27,8 @@ const authorize_student = async (req, res, next) => {
 
     try {
         let token = req.cookies.login;
-        let id = is_student_authentic;
-    
+        let id = is_student_authentic(token);
+        if(!id) return res.redirect('/unauthorised')
         let student = await studentModel.findById(id);
         if(student){
             req.id = id;

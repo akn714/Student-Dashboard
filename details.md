@@ -24,6 +24,11 @@
 * Thinking of implementing Blockchain 
 * Feedback section
 
+### Todo 2:
+* making is_faculty_authentic() function
+* making is_admin_authentic() function
+* setting role and token in cookies during login and signup
+
 ### notes
 * add user id in cookies to append it in private links | adding user id in req obj
 
