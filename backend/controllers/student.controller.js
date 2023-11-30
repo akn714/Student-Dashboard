@@ -15,6 +15,7 @@ function is_student_authentic(token){
         let payload = jwt.verify(token, JWT_KEY);
         return payload.payload
     } catch (error) {
+        console.log('error:', error)
         return false
     }
 }

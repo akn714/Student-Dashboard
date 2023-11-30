@@ -28,11 +28,12 @@ app.use('/faculty', faculty_routes);
 
 app.get('/unauthorised', (req, res)=>{
     // returning a page which displays '401 Unauthorised Accesss!' and below will be a buthon to redirect to login page
-    res.cookie('login', '', { expires: new Date(0), httpOnly: true })
-    res.cookie('role', '', { expires: new Date(0), httpOnly: true })
-    res.status(401).json({
-        message: '401 Unauthorised Access!'
-    })
+    res.cookie('login', '', { expires: new Date(0), httpOnly: true });
+    res.cookie('role', '', { expires: new Date(0), httpOnly: true });
+    // res.status(401).json({
+    //     message: '401 Unauthorised Access!'
+    // })
+    res.status(401).sendFile(__dirname+'/views/html/unauthorised.html');
 })
 
 
@@ -55,45 +56,27 @@ app.get('/', (req, res)=>{
         
         if(!token && !role){
             // redirect to login page
-            return res.redirect('/login');
+            return res.redirect('/auth/login');
         }
         /* -------- if role == 'student' -> authorize person -> redirect to /student -------- */
-        if(role=='student'){
-            if(is_student_authentic(token)){
-                res.redirect('/student');
-            }
-            else{
-                // redirecting to unauthorised page
-                res.redirect('/unauthorised'); // making unauthorised page
-            }
+        if(role=='student' && is_student_authentic(token)){
+            res.redirect('/student');
         }
         /* -------- if role == 'faculty' -> authorize person -> redirect to /faculty -------- */
-        else if(role=='faculty'){
-            if(is_faculty_authentic(token)){
-                res.redirect('/faculty');
-            }
-            else{
-                // redirecting to unauthorised page
-                res.redirect('/unauthorised'); // making unauthorised page
-            }
+        else if(role=='faculty' && is_faculty_authentic(token)){
+            res.redirect('/faculty');
         }
         /* --------   if role == 'admin' -> authorize person -> redirect to /admin   -------- */
-        else if(role=='admin'){
-            if(is_admin_authentic(token)){
-                res.redirect('/admin');
-            }
-            else{
-                // redirecting to unauthorised page
-                res.redirect('/unauthorised'); // making unauthorised page
-            }
+        else if(role=='admin' && is_admin_authentic(token)){
+            res.redirect('/admin');
         }
         else{
-            res.status(404).json({
-                message: 'Nothing found!'
-            })
+            // redirecting to unauthorised page
+            res.redirect('/unauthorised'); // making unauthorised page
+            // res.status(404).json({
+            //     message: 'Nothing found!'
+            // })
         }
-    
-    
         
         // * check role from cookies
         // * after getting role, check for proper authenticity
@@ -108,7 +91,8 @@ app.get('/', (req, res)=>{
 
 // 404 page
 app.use((req, res)=>{
-    res.status(404).render('404', { title: '404 NOT FOUND' })
+    // res.status(404).render('404', { title: '404 NOT FOUND' })
+    res.status(404).sendFile(__dirname+'/viwes/html/404.html');
 })
 
 app.listen(3000, ()=>{
