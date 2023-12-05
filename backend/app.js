@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser')
 const app = express();
 
 const log = require('./logger');
@@ -14,7 +15,8 @@ const { is_faculty_authentic } = require('./controllers/faculty.controller');
 
 
 // middlewares
-app.use(express.urlencoded({ extended: true }));    // to access data send through html forms
+app.use(express.urlencoded());    // to access data send through html forms
+app.use(cookieParser())
 app.use(express.static('public'));    // static files middleware
 app.use(log)
 
@@ -52,12 +54,15 @@ app.get('/', (req, res)=>{
         // if not logged in -> redirect to login page
         
         // set these keys in cookies in browser duing login and signup
-        const token = req.cookies.login;
-        const role = req.cookies.role;
+        let token, role;
         
-        if(!token && !role){
+        if(!req.cookies.login || !req.cookies.role){
             // redirect to login page
             return res.redirect('/auth/login');
+        }
+        else{
+            token = req.cookies.login;
+            role = req.cookies.role;
         }
         /* -------- if role == 'student' -> authorize person -> redirect to /student -------- */
         if(role=='student' && is_student_authentic(token)){
@@ -83,6 +88,7 @@ app.get('/', (req, res)=>{
         // * after getting role, check for proper authenticity
         // * authorizing person using cookies
     } catch (error) {
+        console.log('error:', error);
         return res.status(500).json({
             error: error
         })
@@ -93,7 +99,7 @@ app.get('/', (req, res)=>{
 // 404 page
 app.use((req, res)=>{
     // res.status(404).render('404', { title: '404 NOT FOUND' })
-    res.status(404).sendFile(__dirname+'/viwes/html/404.html');
+    res.status(404).sendFile(__dirname+'/views/html/404.html');
 })
 
 app.listen(3000, ()=>{

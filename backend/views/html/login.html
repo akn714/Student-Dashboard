@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <style>
+        form{
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            flex-direction: column;
+            gap: 10px;
+            width: 90vw;
+            height: 80vh;
+        }
+        .fields{
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <form action="/auth/login" method="post">
+        <select name="role" id="roles">
+            <option value="--select role--">--select role--</option>
+            <option value="student">student</option>
+            <option value="faculty">faculty</option>
+            <option value="admin">admin</option>
+        </select>
+        <div class="fields">
+            <div class="email-field">
+                <label for="email">email </label>
+                <input type="text" name="email" id="email">
+            </div>
+            <div class="student-field">
+                <label for="roll_no">roll no</label>
+                <input type="text" name="year" id="roll_no">
+            </div>
+            <div>
+                <label for="password">password </label>
+                <input type="password" name="password" id="password">
+            </div>
+            <button type="submit">submit</button>
+        </div>
+    </form>
+
+    <script>
+        let roles = document.querySelector('#roles');
+        let fields = document.querySelector('.fields');
+        let student_field = document.querySelector('.student-field');
+        let email_field = document.querySelector('.email-field');
+
+        fields.style.display = 'none';
+        student_field.style.display = 'none';
+        email_field.style.display = 'none';
+
+        roles.addEventListener('change', (e)=>{
+            if(roles.value=='student'){
+                fields.style.display = 'flex';
+                student_field.style.display = 'block';
+                email_field.style.display = 'none';
+            }
+            else if(roles.value=='faculty' || roles.value=='admin'){
+                fields.style.display = 'flex';
+                email_field.style.display = 'block';
+                student_field.style.display = 'none';
+            }
+            else{
+                fields.style.display = 'none';
+            }
+        })
+    </script>
+</body>
+</html>

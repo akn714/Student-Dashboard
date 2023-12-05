@@ -67,7 +67,7 @@ studentSchema.pre('save', async function(){
     this.password = hashedPassword
 })
 
-const studentModel = mongoose.model('studentSchema', studentSchema)
+const studentModel = mongoose.model('studentModel', studentSchema)
 
 module.expotrs = studentModel
 

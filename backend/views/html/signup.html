@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <style>
+        form{
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            flex-direction: column;
+            gap: 10px;
+            width: 90vw;
+            height: 80vh;
+        }
+    </style>
+</head>
+<body>
+    <form action="/auth/signup" method="post">
+        <label for="name">name </label>
+        <input type="text" name="name" id="name">
+        <label for="email">email </label>
+        <input type="text" name="email" id="email">
+        <label for="password">password </label>
+        <input type="password" name="password" id="password">
+        <label for="confirmPassword">confirmPassword </label>
+        <input type="password" name="confirmPassword" id="confirmPassword">
+        <select name="role" id="roles">
+            <option value="--select role--">--select role--</option>
+            <option value="student">student</option>
+            <option value="faculty">faculty</option>
+            <option value="admin">admin</option>
+        </select>
+        <div class="student-fields">
+            <label for="roll_no">roll no</label>
+            <input type="text" name="year" id="roll_no">
+            <label for="branch">branch</label>
+            <select name="branch">
+                <option value="cse">cse</option>
+                <option value="ee">ee</option>
+                <option value="me">me</option>
+                <option value="ce">ce</option>
+            </select>
+            <label for="year">year</label>
+            <select name="year">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
+        <button type="submit">submit</button>
+    </form>
+
+    <script>
+        let roles = document.querySelector('#roles');
+        let student_fields = document.querySelector('.student-fields');
+
+        student_fields.style.display = 'none';
+
+        roles.addEventListener('change', (e)=>{
+            if(roles.value=='student') student_fields.style.display = 'block';
+            else student_fields.style.display = 'none';
+        })
+    </script>
+</body>
+</html>

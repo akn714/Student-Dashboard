@@ -18,17 +18,19 @@ let JWT_KEY = process.env.JWT_KEY;
 
 module.exports.get_signup_page = function get_signup_page(req, res){
     // returning signup page
+    res.sendFile('D:/coding/github/Student-Dashboard/backend/views/html/signup.html');
 }
 
 module.exports.get_login_page = function get_login_page(req, res){
     // returning login page
+    res.sendFile('D:/coding/github/Student-Dashboard/backend/views/html/login.html');
 }
 
 
 module.exports.signup = async function signup(req, res){
     try {
         let role = req.body.role;
-        
+        console.log(role);
         if(role=='student'){
             let data = {
                 'name': req.body.name,
@@ -39,8 +41,12 @@ module.exports.signup = async function signup(req, res){
                 'password': req.body.password,
                 'confirmPassword': req.body.confirmPassword
             }
-
-            let student = await studentModel.create(data);
+            let student;
+            try {
+                student = await studentModel.create(data);
+            } catch (error) {
+                console.log('error:', error);
+            }
             if(student){
                 let uid = student['_id'];
                 let token = jwt.sign({ payload: uid }, JWT_KEY);

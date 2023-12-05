@@ -4,7 +4,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 const db_link = process.env.DB_LINK
-mongoose.conncet(db_link)
+mongoose.connect(db_link)
 .then((db)=>{
     console.log('[+] faculty db connceted')
 })
@@ -35,7 +35,7 @@ const facultySchema = mongoose.Schema({
     }
 })
 
-const facultyModel = mongoose.model('facultySchema', facultySchema)
+const facultyModel = mongoose.model('facultyModel', facultySchema)
 
 module.expotrs = facultyModel
 
