@@ -23,8 +23,9 @@
   * notifications will be sent to only those students who are in the perticular branch and year
 * Thinking of implementing Blockchain 
 * Feedback section
+* Mess bill section
 
-### Todo 2:
+### Todo 2: (this is to be done as soon as possible)
 * making is_faculty_authentic() function
 * making is_admin_authentic() function
 * setting role and token in cookies during login and signup
