@@ -9,6 +9,7 @@ const authController = require('../controllers/auth.controller')
 
 const router = express.Router()
 
+router.get('/logout', authController.logout);
 
 // add routes here
 router.get('/signup', authController.get_signup_page);

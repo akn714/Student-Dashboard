@@ -37,5 +37,5 @@ const facultySchema = mongoose.Schema({
 
 const facultyModel = mongoose.model('facultyModel', facultySchema)
 
-module.expotrs = facultyModel
+module.exports = facultyModel
 

@@ -69,5 +69,5 @@ studentSchema.pre('save', async function(){
 
 const studentModel = mongoose.model('studentModel', studentSchema)
 
-module.expotrs = studentModel
+module.exports = studentModel
 

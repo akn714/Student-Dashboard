@@ -17,20 +17,30 @@ dotenv.config();
 let JWT_KEY = process.env.JWT_KEY;
 
 module.exports.get_signup_page = function get_signup_page(req, res){
+    if(req.cookies.login){
+        return res.send({
+            message: 'Ongoing session detecetd!'
+        });
+    }
     // returning signup page
-    res.sendFile('D:/coding/github/Student-Dashboard/backend/views/html/signup.html');
+    res.sendFile('/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/html/signup.html');
 }
 
 module.exports.get_login_page = function get_login_page(req, res){
+    if(req.cookies.login){
+        return res.send({
+            message: 'User Already Logged In'
+        });
+    }
     // returning login page
-    res.sendFile('D:/coding/github/Student-Dashboard/backend/views/html/login.html');
+    res.sendFile('/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/html/login.html');
 }
 
 
 module.exports.signup = async function signup(req, res){
     try {
         let role = req.body.role;
-        console.log(role);
+        console.log('[+]', role);
         if(role=='student'){
             let data = {
                 'name': req.body.name,
@@ -45,12 +55,12 @@ module.exports.signup = async function signup(req, res){
             try {
                 student = await studentModel.create(data);
             } catch (error) {
-                console.log('error:', error);
+                console.log('[+]', 'error:', error);
             }
             if(student){
                 let uid = student['_id'];
                 let token = jwt.sign({ payload: uid }, JWT_KEY);
-                console.log(uid, token);
+                console.log('[+]', uid, token);
                 res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
                 res.cookie('role', 'student', { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
     
@@ -74,7 +84,7 @@ module.exports.signup = async function signup(req, res){
             if(faculty){
                 let uid = faculty['_id'];
                 let token = jwt.sign({ payload: uid }, JWT_KEY);
-                console.log(uid, token);
+                console.log('[+]', uid, token);
                 res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
                 res.cookie('role', 'faculty', { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
     
@@ -96,7 +106,6 @@ module.exports.signup = async function signup(req, res){
             error: error
         })
     }
-
 }
 
 module.exports.login = async function login(req, res){
@@ -120,7 +129,7 @@ module.exports.login = async function login(req, res){
             if(isValid){
                 let uid = student['_id'];
                 let token = jwt.sign({ payload: uid }, JWT_KEY);
-                console.log(uid, token);
+                console.log('[+]', uid, token);
                 res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
                 res.cookie('role', 'student', { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
@@ -152,7 +161,7 @@ module.exports.login = async function login(req, res){
             if(isValid){
                 let uid = faculty['_id'];
                 let token = jwt.sign({ payload: uid }, JWT_KEY);
-                console.log(uid, token);
+                console.log('[+]', uid, token);
                 res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
                 res.cookie('role', 'faculty', { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
@@ -181,7 +190,7 @@ module.exports.login = async function login(req, res){
             if(isValid){
                 let uid = admin['_id'];
                 let token = jwt.sign({ payload: uid }, JWT_KEY);
-                console.log(uid, token);
+                console.log('[+]', uid, token);
                 res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
                 res.cookie('role', 'admin', { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
@@ -211,6 +220,27 @@ module.exports.login = async function login(req, res){
     }
 }
 
+module.exports.logout = (req, res) => {
+    try {
+        if(req.cookies.login){
+            res.clearCookie('login');
+            res.clearCookie('role');
+
+            res.json({
+                message: "User logged out!"
+            })
+        }
+        else{
+            res.json({
+                message: "No user logged in!"
+            })
+        }
+    } catch (error) {
+        res.json({
+            error: error
+        })
+    }
+}
 
 
 

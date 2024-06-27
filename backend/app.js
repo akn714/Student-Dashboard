@@ -15,6 +15,7 @@ const { is_faculty_authentic } = require('./controllers/faculty.controller');
 
 
 // middlewares
+app.engine('html', require('ejs').renderFile);
 app.use(express.urlencoded());    // to access data send through html forms
 app.use(cookieParser())
 app.use(express.static('public'));    // static files middleware
@@ -31,8 +32,10 @@ app.use('/faculty', faculty_routes);
 
 app.get('/unauthorised', (req, res)=>{
     // returning a page which displays '401 Unauthorised Accesss!' and below will be a buthon to redirect to login page
-    res.cookie('login', '', { expires: new Date(0), httpOnly: true });
-    res.cookie('role', '', { expires: new Date(0), httpOnly: true });
+    // res.cookie('login', '', { expires: new Date(0), httpOnly: true });
+    // res.cookie('role', '', { expires: new Date(0), httpOnly: true });
+    res.clearCookie('login');
+    res.clearCookie('role');
     // res.status(401).json({
     //     message: '401 Unauthorised Access!'
     // })
@@ -103,5 +106,5 @@ app.use((req, res)=>{
 })
 
 app.listen(3000, ()=>{
-    console.log('app running on http://localhost:3000');
+    console.log('[+] App running on http://localhost:3000');
 })

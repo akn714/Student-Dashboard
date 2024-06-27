@@ -5,6 +5,22 @@ Student-Dashboard is a revolutionary web portal designed to bridge the gap betwe
 
 Student-Dashboard is not just a web portal; it's a catalyst for academic growth, a tool that promotes transparency, accountability, and collaboration. With Student-Dashboard, students and faculty members can experience a more connected and productive academic journey, ultimately resulting in improved learning outcomes.
 
+### Features
+**Student**
+* Internal Marks
+* Attendence
+* General information of student
+* View other student's public details
+
+**CR**
+* Updaing Internal Marks
+* Updating Attendence
+
+**Faculty**
+* Updaing Internal Marks
+* Updating Attendence
+* View student's public details
+
 
 ### Key Features:
 
@@ -21,3 +37,4 @@ Student-Dashboard is not just a web portal; it's a catalyst for academic growth,
 * <b>Enhanced Communication</b>: Student-Dashboard promotes open and transparent communication between students and faculty, fostering collaboration in the pursuit of academic excellence.
 
 * <b>Time Efficiency</b>: Faculty members save time and effort by effortlessly managing attendance records and assessment data on a single platform.
+

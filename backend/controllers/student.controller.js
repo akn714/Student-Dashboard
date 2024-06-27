@@ -24,12 +24,12 @@ function is_student_authentic(token){
 // middleware to protect private routes from an unauthorized access
 const authorize_student = async (req, res, next) => {
     // if authorized -> next()
-    // else response -> 'action not allowed'
+    // else responsed -> 'action not allowed'
 
     try {
         let token = req.cookies.login;
         let id = is_student_authentic(token);
-        if(!id) return res.redirect('/unauthorised')
+        if(!id) return res.redirect('/unauthorised');
         let student = await studentModel.findById(id);
         if(student){
             req.id = id;
@@ -50,7 +50,7 @@ const authorize_student = async (req, res, next) => {
 // PRIVATE ROUTES
 const profile = async (req, res) => {
     // student profile
-    // -> sending student data for there profile
+    // -> sending student data for there 
     try {
         let id = req.id;
         let student = await studentModel.findById(id);
@@ -63,14 +63,37 @@ const profile = async (req, res) => {
             'profileImage': student.profileImage,
             'cgpa': student.cgpa
         }
+        res.sendFile('/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/html/student/profile.html', {name: student.name});
     
-        res.json({
-            message: 'student data for student profile',
-            data: data
-        })
+        // res.json({
+        //     message: 'student data for student profile',
+        //     data: data
+        // })
     } catch (error) {
         res.status(500).json({
             message: 'some error occured',
+            error: error
+        })
+    }
+}
+
+const getStudentData = async (req, res) => {
+    try {
+        let id = req.id;
+        let student = await studentModel.findById(id);
+    
+        let data = {
+            'name': student.name,
+            'roll_no': student.roll_no,
+            'branch': student.branch,
+            'year': student.year,
+            'profileImage': student.profileImage,
+            'cgpa': student.cgpa
+        }
+
+        res.json(data);
+    } catch (error) {
+        res.json({
             error: error
         })
     }
@@ -194,7 +217,9 @@ const get_avg_cgpa_per_year_per_branch = (req, res) => {
 
 module.exports = {
     'authorize_student': authorize_student,
+    'is_student_authentic': is_student_authentic,
     'profile': profile,
+    'getStudentData': getStudentData,
     'secrets': secrets,
     'add_secret': add_secret,
     'attendence_records': attendence_records,
