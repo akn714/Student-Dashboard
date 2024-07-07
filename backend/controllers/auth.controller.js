@@ -36,6 +36,31 @@ module.exports.get_login_page = function get_login_page(req, res){
     res.sendFile('/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/html/login.html');
 }
 
+function validateUserData(req, res, role, data){
+    if(role=='student'){
+        if(
+            data.name==undefined ||
+            data.email==undefined ||
+            data.roll_no==undefined ||
+            data.branch==undefined ||
+            data.year==undefined ||
+            data.password==undefined ||
+            data.confirmPassword==undefined
+        ) return res.json({
+            message: 'An error occured!'
+        })
+    }
+    else if(roll=='faculty'){
+        if(
+            data.name==undefined ||
+            data.email==undefined ||
+            data.password==undefined ||
+            data.confirmPassword==undefined
+        ) return res.json({
+            message: 'An error occured!'
+        })
+    }
+}
 
 module.exports.signup = async function signup(req, res){
     try {
@@ -51,6 +76,7 @@ module.exports.signup = async function signup(req, res){
                 'password': req.body.password,
                 'confirmPassword': req.body.confirmPassword
             }
+            validateUserData(req, res, role, data);
             let student;
             try {
                 student = await studentModel.create(data);
@@ -79,7 +105,8 @@ module.exports.signup = async function signup(req, res){
                 'password': req.body.password,
                 'confirmPassword': req.body.confirmPassword
             }
-
+            validateUserData(req, res, role, data);
+            
             let faculty = await facultyModel.create(data);
             if(faculty){
                 let uid = faculty['_id'];
@@ -121,6 +148,7 @@ module.exports.login = async function login(req, res){
         if(role=='student'){
             let student = await studentModel.findOne({ 'roll_no': req.body.roll_no });
             
+            
             if(!student) return res.status(404).json({
                 message: 'Student not found'
             });
@@ -133,16 +161,17 @@ module.exports.login = async function login(req, res){
                 res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
                 res.cookie('role', 'student', { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
-                return res.json({
-                    message: 'student has logged in',
-                    student_details: {
-                        'name': student.name,
-                        'email': student.email,
-                        'roll_no': student.roll_no,
-                        'branch': student.branch,
-                        'year': student.year
-                    }
-                });
+                return res.redirect('/');
+                // return res.json({
+                //     message: 'student has logged in',
+                //     student_details: {
+                //         'name': student.name,
+                //         'email': student.email,
+                //         'roll_no': student.roll_no,
+                //         'branch': student.branch,
+                //         'year': student.year
+                //     }
+                // });
             }
             else{
                 return res.status(401).json({
@@ -226,14 +255,13 @@ module.exports.logout = (req, res) => {
             res.clearCookie('login');
             res.clearCookie('role');
 
-            res.json({
-                message: "User logged out!"
-            })
+            res.redirect('/')
+            // res.json({
+                //     message: "User logged out!"
+                // })
         }
         else{
-            res.json({
-                message: "No user logged in!"
-            })
+            res.redirect('/')
         }
     } catch (error) {
         res.json({

@@ -32,6 +32,7 @@
 **Faculty**
 
 ### notes
-* attendence: subject wise display
+* Attendence: subject wise display
+* Building a telegram or discord bot to manage and debug database
 
 

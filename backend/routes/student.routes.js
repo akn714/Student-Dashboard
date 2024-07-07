@@ -49,6 +49,8 @@ router.get('/internal-marks-records', student_controller.internal_marks_records)
 router.post('/secrets/add', student_controller.add_secret)
 router.post('/end-sem-result/upload', student_controller.upload_end_sem_result)
 
+router.post('/updateStudentDetails', student_controller.updateStudentDetails)
+
 module.exports = router
 
 

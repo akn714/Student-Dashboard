@@ -15,7 +15,6 @@ const { is_faculty_authentic } = require('./controllers/faculty.controller');
 
 
 // middlewares
-app.engine('html', require('ejs').renderFile);
 app.use(express.urlencoded());    // to access data send through html forms
 app.use(cookieParser())
 app.use(express.static('public'));    // static files middleware

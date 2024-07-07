@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>login</title>
     <style>
         form{
@@ -28,18 +30,18 @@
             <option value="faculty">faculty</option>
             <option value="admin">admin</option>
         </select>
-        <div class="fields">
-            <div class="email-field">
-                <label for="email">email </label>
-                <input type="text" name="email" id="email">
+        <div class="fields form-group">
+            <div class="email-field form-group">
+                <label for="email">Email address</label>
+                <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
             </div>
-            <div class="student-field">
-                <label for="roll_no">roll no</label>
-                <input type="text" name="year" id="roll_no">
+            <div class="student-field form-group">
+                <label for="roll_no">Roll No.</label>
+                <input name="roll_no" type="number" class="form-control" id="roll_no" aria-describedby="emailHelp" placeholder="Enter your roll no.">
             </div>
-            <div>
-                <label for="password">password </label>
-                <input type="password" name="password" id="password">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input name="password" type="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="Enter password">
             </div>
             <button type="submit">submit</button>
         </div>
@@ -71,5 +73,8 @@
             }
         })
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

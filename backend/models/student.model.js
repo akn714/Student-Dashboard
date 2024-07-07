@@ -20,7 +20,8 @@ const studentSchema = mongoose.Schema({
     },
     email:{
         type: String,
-        require: true
+        require: true,
+        lowercase: true
     },
     roll_no:{
         type: Number,
@@ -53,7 +54,11 @@ const studentSchema = mongoose.Schema({
         type: Number
     },
     sgpa: [Number],
-    attendence: [Number]
+    attendence: [Number],
+    createdAt: {
+        type: Date,
+        default: () => Date.now()
+    }
 })
 
 // hashing | pre hook

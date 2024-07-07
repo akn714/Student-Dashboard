@@ -215,6 +215,27 @@ const get_avg_cgpa_per_year_per_branch = (req, res) => {
     })
 }
 
+const updateStudentDetails = async (req, res) => {
+    try {
+        let id = req.id;
+        let student = await studentModel.findById(id);
+        
+        let data = req.body;
+        for(key in data){
+            student[key] = data[key];
+        }
+        await student.save();
+
+        res.json({
+            message: "Student data updated successfully!"
+        })
+    } catch (error) {
+        res.json({
+            message: "Can not update the data at the moment!"
+        })
+    }
+}
+
 module.exports = {
     'authorize_student': authorize_student,
     'is_student_authentic': is_student_authentic,
@@ -228,5 +249,6 @@ module.exports = {
     'assignments': assignments,
     'internal_marks_records': internal_marks_records,
     'get_avg_cgpa_per_year': get_avg_cgpa_per_year,
-    'get_avg_cgpa_per_year_per_branch': get_avg_cgpa_per_year_per_branch
+    'get_avg_cgpa_per_year_per_branch': get_avg_cgpa_per_year_per_branch,
+    'updateStudentDetails': updateStudentDetails
 }
