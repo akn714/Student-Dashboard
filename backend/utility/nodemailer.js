@@ -4,7 +4,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 // async..await is not allowed in global scope, must use a wrapper
-module.exports.sendMail = async function sendMail(str, data) {
+async function sendMail(str, data) {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -43,3 +43,4 @@ module.exports.sendMail = async function sendMail(str, data) {
   console.log("Message sent: %s", info.messageId);
 }
 
+module.exports = sendMail;

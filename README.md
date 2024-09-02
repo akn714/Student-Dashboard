@@ -38,3 +38,6 @@ Student-Dashboard is not just a web portal; it's a catalyst for academic growth,
 
 * <b>Time Efficiency</b>: Faculty members save time and effort by effortlessly managing attendance records and assessment data on a single platform.
 
+
+
+## How to setup?

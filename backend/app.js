@@ -38,7 +38,7 @@ app.get('/unauthorised', (req, res)=>{
     // res.status(401).json({
     //     message: '401 Unauthorised Access!'
     // })
-    res.status(401).sendFile(__dirname+'/views/html/unauthorised.html');
+    return res.status(401).sendFile(__dirname+'/views/html/unauthorised.html');
 })
 
 
@@ -63,6 +63,7 @@ app.get('/', (req, res)=>{
             return res.redirect('/auth/login');
         }
         else{
+            // fetching token and role from browser cookies
             token = req.cookies.login;
             role = req.cookies.role;
         }

@@ -11,7 +11,8 @@ const bcrypt = require('bcrypt');
 
 const studentModel = require('../models/student.model');
 const facultyModel = require('../models/faculty.model');
-const sendMail = require('../utility/nodemailer')
+const sendMail = require('../utility/nodemailer');
+const log = require('../logger');
 
 dotenv.config();
 let JWT_KEY = process.env.JWT_KEY;
@@ -36,29 +37,52 @@ module.exports.get_login_page = function get_login_page(req, res){
     res.sendFile('/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/html/login.html');
 }
 
-function validateUserData(req, res, role, data){
-    if(role=='student'){
-        if(
-            data.name==undefined ||
-            data.email==undefined ||
-            data.roll_no==undefined ||
-            data.branch==undefined ||
-            data.year==undefined ||
-            data.password==undefined ||
-            data.confirmPassword==undefined
-        ) return res.json({
-            message: 'An error occured!'
-        })
+async function validateUserData(role, data){
+    try{
+        if(role=='student'){
+            if(
+                data.name==undefined ||
+                data.email==undefined ||
+                data.roll_no==undefined ||
+                data.branch==undefined ||
+                data.year==undefined ||
+                data.password==undefined ||
+                data.confirmPassword==undefined
+            ) return [false, 'An error occured!'];
+            else{
+                let student = await studentModel.findOne({
+                    $or: [
+                        { 'roll_no': data.roll_no },
+                        { 'email': data.email}
+                    ]
+                });
+                if(student){
+                    return [false, 'student already exists!'];
+                }
+                return [true];
+            }
+        }
+        else if(roll=='faculty'){
+            if(
+                data.name==undefined ||
+                data.email==undefined ||
+                data.password==undefined ||
+                data.confirmPassword==undefined
+            ) return [false, 'An error occured!'];
+            let faculty = await facultyModel.findOne({
+                $or: [
+                    { 'email': data.email}
+                ]
+            });
+            if(faculty){
+                return [false, 'faculty already exists!'];
+            }
+            return [true];
+        }
     }
-    else if(roll=='faculty'){
-        if(
-            data.name==undefined ||
-            data.email==undefined ||
-            data.password==undefined ||
-            data.confirmPassword==undefined
-        ) return res.json({
-            message: 'An error occured!'
-        })
+    catch (error) {
+        console.log('[-]', error);
+        return [false, error];
     }
 }
 
@@ -76,25 +100,38 @@ module.exports.signup = async function signup(req, res){
                 'password': req.body.password,
                 'confirmPassword': req.body.confirmPassword
             }
-            validateUserData(req, res, role, data);
-            let student;
-            try {
-                student = await studentModel.create(data);
-            } catch (error) {
-                console.log('[+]', 'error:', error);
+            let isUserValid = await validateUserData(role, data);
+            if(isUserValid[0]){
+                console.log('-----011111111111111111111110------')
+                let student;
+                try {
+                    student = await studentModel.create(data);
+                } catch (error) {
+                    console.log('[+]', 'error:', error);
+                }
+                if(student){
+                    let uid = student['_id'];
+                    let token = jwt.sign({ payload: uid }, JWT_KEY);
+                    console.log('[+]', uid, token);
+                    res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
+                    res.cookie('role', 'student', { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
+                    
+                    try{
+                        await sendMail("signup", student);
+                    }
+                    catch (error){
+                        console.log('[-] unable to send mail:', error);
+                    }
+        
+                    return res.json({
+                        message: 'student signed up',
+                        data: student
+                    })
+                }
             }
-            if(student){
-                let uid = student['_id'];
-                let token = jwt.sign({ payload: uid }, JWT_KEY);
-                console.log('[+]', uid, token);
-                res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
-                res.cookie('role', 'student', { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
-    
-                sendMail("signup", student);
-    
+            else{
                 return res.json({
-                    message: 'student signed up',
-                    data: student
+                    message: isUserValid[1]
                 })
             }
         }
@@ -105,21 +142,33 @@ module.exports.signup = async function signup(req, res){
                 'password': req.body.password,
                 'confirmPassword': req.body.confirmPassword
             }
-            validateUserData(req, res, role, data);
-            
-            let faculty = await facultyModel.create(data);
-            if(faculty){
-                let uid = faculty['_id'];
-                let token = jwt.sign({ payload: uid }, JWT_KEY);
-                console.log('[+]', uid, token);
-                res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
-                res.cookie('role', 'faculty', { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
-    
-                sendMail("signup", faculty);
-    
+            let isUserValid = await validateUserData(role, data);
+
+            if(isUserValid[0]){
+                let faculty = await facultyModel.create(data);
+                if(faculty){
+                    let uid = faculty['_id'];
+                    let token = jwt.sign({ payload: uid }, JWT_KEY);
+                    console.log('[+]', uid, token);
+                    res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
+                    res.cookie('role', 'faculty', { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
+        
+                    try{
+                        sendMail("signup", faculty);
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+        
+                    return res.json({
+                        message: 'faculty signed up',
+                        data: faculty
+                    })
+                }
+            }
+            else{
                 return res.json({
-                    message: 'faculty signed up',
-                    data: faculty
+                    message: isUserValid[1]
                 })
             }
         }
