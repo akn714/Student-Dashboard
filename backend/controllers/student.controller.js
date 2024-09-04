@@ -29,16 +29,17 @@ const authorize_student = async (req, res, next) => {
     try {
         let token = req.cookies.login;
         let id = is_student_authentic(token);
-        if(!id) return res.redirect('/unauthorised');
+        if(!id) return res.redirect('/auth/login');
         let student = await studentModel.findById(id);
         if(student){
             req.id = id;
             next();
         }
         else{
-            return res.status(404).json({
-                message: 'student not found'
-            })
+            return res.redirect('/auth/login');
+            // return res.status(404).json({
+            //     message: 'student not found'
+            // })
         }
     } catch (error) {
         return res.status(500).json({
@@ -50,20 +51,20 @@ const authorize_student = async (req, res, next) => {
 // PRIVATE ROUTES
 const profile = async (req, res) => {
     // student profile
-    // -> sending student data for there 
+    // -> sending student data for there profile
     try {
-        let id = req.id;
-        let student = await studentModel.findById(id);
+        // let id = req.id;
+        // let student = await studentModel.findById(id);
     
-        let data = {
-            'name': student.name,
-            'roll_no': student.roll_no,
-            'branch': student.branch,
-            'year': student.year,
-            'profileImage': student.profileImage,
-            'cgpa': student.cgpa
-        }
-        res.sendFile('/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/html/student/profile.html', {name: student.name});
+        // let data = {
+        //     'name': student.name,
+        //     'roll_no': student.roll_no,
+        //     'branch': student.branch,
+        //     'year': student.year,
+        //     'profileImage': student.profileImage,
+        //     'cgpa': student.cgpa
+        // }
+        res.sendFile('/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/html/student/profile.html');
     
         // res.json({
         //     message: 'student data for student profile',
@@ -81,14 +82,17 @@ const getStudentData = async (req, res) => {
     try {
         let id = req.id;
         let student = await studentModel.findById(id);
-    
+
         let data = {
             'name': student.name,
+            'email': student.email,
+            'dob': student.dob,
             'roll_no': student.roll_no,
             'branch': student.branch,
             'year': student.year,
             'profileImage': student.profileImage,
-            'cgpa': student.cgpa
+            'cgpa': student.cgpa,
+            'enrollment_no': student.enrollment_no
         }
 
         res.json(data);
@@ -190,21 +194,62 @@ const assignments = (req, res) => {
 
 const internal_marks_records = (req, res) => {
     // internal marks records of student
-    res.json({
-        message: 'implementation left'
-    })
+    
+    /*
+    // Data Template
+    {
+        SUBJECT_CODE: {
+            CT: { type: String, default: "" },
+            AT: { type: String, default: "" },
+            ATTENDENCE_MARKS: { type: String, default: "" },
+            ASSIGNMENT_MARKS: { type: String, default: "" },
+            TOTAL: { type: String, default: "" }
+        }
+    }
+    */
+
+    try {
+        let id = req.id;
+        let student = studentModel.findById(id);
+        if(student){
+            let internal_marks = student.internal_marks_records;
+            return res.status(200).json({
+                data: internal_marks
+            })
+        }
+        else{
+            return res.status(404).json({
+                message: 'Student not found!'
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error: error
+        })
+    }
 }
 
-// PUBLIC ROUTES
-const get_avg_cgpa_per_year = (req, res) => {
-    // return average cgpa per year
-    let year = req.params.year;
-
-    res.json({
-        message: 'implementation left'
-    })
+// PUBLIC ROUTES (pending)
+const get_avg_cgpa_per_year = async (req, res) => {
+    try {
+        // return average cgpa per year
+        let year = req.params.year;
+        console.log("year", 2);
+        // let student = await studentModel.find({year: year}, 'cpga');
+        let student = await studentModel.find({year: year}, 'name');
+        if(student){
+            return res.status(200).json({
+                message: student
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error: error
+        })
+    }
 }
 
+// (pending) (mearging both function -> this fucntion + above function)
 const get_avg_cgpa_per_year_per_branch = (req, res) => {
     // return average cgpa per year per branch
     let year = req.params.year;
@@ -215,6 +260,7 @@ const get_avg_cgpa_per_year_per_branch = (req, res) => {
     })
 }
 
+// updating student details -> accepts objects of fields -> eg. {name: 'asdfad', roll_no: 2343}
 const updateStudentDetails = async (req, res) => {
     try {
         let id = req.id;
@@ -222,7 +268,8 @@ const updateStudentDetails = async (req, res) => {
         
         let data = req.body;
         for(key in data){
-            student[key] = data[key];
+            value = data[key];
+            if(value!='' && value!=null && value!=undefined) student[key] = data[key];
         }
         await student.save();
 
@@ -232,6 +279,26 @@ const updateStudentDetails = async (req, res) => {
     } catch (error) {
         res.json({
             message: "Can not update the data at the moment!"
+        })
+    }
+}
+
+const getStudents = async (req, res)=>{
+    try {
+        let student = await studentModel.find({}, 'name roll_no branch year');
+        if(student){
+            return res.status(200).json({
+                data: student
+            })
+        }
+        else{
+            return res.json({
+                message: 'No student found!'
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            error: error
         })
     }
 }
@@ -250,5 +317,6 @@ module.exports = {
     'internal_marks_records': internal_marks_records,
     'get_avg_cgpa_per_year': get_avg_cgpa_per_year,
     'get_avg_cgpa_per_year_per_branch': get_avg_cgpa_per_year_per_branch,
-    'updateStudentDetails': updateStudentDetails
+    'updateStudentDetails': updateStudentDetails,
+    'getStudents': getStudents
 }

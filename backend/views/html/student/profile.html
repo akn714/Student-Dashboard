@@ -12,11 +12,14 @@
             let res = await fetch('/student/get-data');
             let data = await res.json();
 
-            document.getElementById('student-name').innerText = data.name
-            document.getElementById('student-roll_no').innerText = data.roll_no
-            document.getElementById('student-branch').innerText = data.branch
-            document.getElementById('student-year').innerText = data.year
-            document.getElementById('student-current_gpa').innerText = "null"
+            document.getElementById('student-name').getElementsByClassName('txt')[0].innerText = data.name
+            document.getElementById('student-email').getElementsByClassName('txt')[0].innerText = data.email
+            document.getElementById('student-dob').getElementsByClassName('txt')[0].innerText = data.dob
+            document.getElementById('student-roll_no').getElementsByClassName('txt')[0].innerText = data.roll_no
+            document.getElementById('student-branch').getElementsByClassName('txt')[0].innerText = data.branch
+            document.getElementById('student-year').getElementsByClassName('txt')[0].innerText = data.year
+            document.getElementById('student-current_gpa').getElementsByClassName('txt')[0].innerText = (data.cgpa?data.cgpa:"No data")
+            document.getElementById('student-enrollment_no').getElementsByClassName('txt')[0].innerText = (data.enrollment_no?data.enrollment_no:"No data")
 
             document.title = `Profile | ${data.name}`
 
@@ -25,6 +28,16 @@
         // render();
     </script>
     <script src="/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/js/test.js"></script>
+    
+    <style>
+        form#edit-profile-form{
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            flex-direction: column;
+            display: none;
+        }
+    </style>
 </head>
 
 <body onload="render()">
@@ -66,43 +79,96 @@
                 <th scope="row">Name</th>
                 <td id="student-name">
                     <span class="txt"></span>
-                    <button onclick="edit()">edit</button>
+                    <!-- <button onclick="edit()">edit</button> -->
                 </td>
             </tr>
             <tr>
                 <th scope="row">Roll No.</th>
                 <td id="student-roll_no">
                     <span class="txt"></span>
-                    <button onclick="edit()">edit</button>
+                    <!-- <button onclick="edit()">edit</button> -->
                 </td>
             </tr>
             <tr>
                 <th scope="row">Branch</th>
                 <td id="student-branch">
                     <span class="txt"></span>
-                    <button onclick="edit()">edit</button>
+                    <!-- <button onclick="edit()">edit</button> -->
                 </td>
             </tr>
             <tr>
                 <th scope="row">Year</th>
                 <td id="student-year">
                     <span class="txt"></span>
-                    <button onclick="edit()">edit</button>
+                    <!-- <button onclick="edit()">edit</button> -->
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Email</th>
+                <td id="student-email">
+                    <span class="txt"></span>
+                    <!-- <button onclick="edit()">edit</button> -->
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">DOB</th>
+                <td id="student-dob">
+                    <span class="txt"></span>
+                    <!-- <button onclick="edit()">edit</button> -->
                 </td>
             </tr>
             <tr>
                 <th scope="row">Current GPA</th>
                 <td id="student-current_gpa">
                     <span class="txt"></span>
-                    <button onclick="edit()">edit</button>
+                    <!-- <button onclick="edit()">edit</button> -->
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Enrollment No.</th>
+                <td id="student-enrollment_no">
+                    <span class="txt"></span>
+                    <!-- <button onclick="edit()">edit</button> -->
                 </td>
             </tr>
         </tbody>
     </table>
     <!-- MAIN -->
 
-    <form action="/updateStudentDetails" method="post">
-
+    <button onclick="edit()">Edit Profile</button>
+    <script>
+        let edit_trigger = 0;
+        function edit(){
+            if(edit_trigger==1) document.getElementById('edit-profile-form').style.display = 'none', edit_trigger=0;
+            else if(edit_trigger==0) document.getElementById('edit-profile-form').style.display = 'block', edit_trigger=1;
+        }
+    </script>
+    <form id="edit-profile-form" action="/student/updateStudentDetails" method="post">
+        <label for="name">name </label>
+        <input type="text" name="name" id="name">
+        <label for="email">email </label>
+        <input type="text" name="email" id="email">
+        <div class="student-fields">
+            <label for="roll_no">roll no</label>
+            <input type="text" name="roll_no" id="roll_no">
+            <label for="branch">branch</label>
+            <select name="branch">
+                <option value="" selected>--branch--</option>
+                <option value="cse">cse</option>
+                <option value="ee">ee</option>
+                <option value="me">me</option>
+                <option value="ce">ce</option>
+            </select>
+            <label for="year">year</label>
+            <select name="year">
+                <option value="" selected>--year--</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
+        <button type="submit">submit</button>
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

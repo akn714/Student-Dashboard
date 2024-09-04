@@ -8,6 +8,7 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
+const path = require('path');
 
 const studentModel = require('../models/student.model');
 const facultyModel = require('../models/faculty.model');
@@ -24,7 +25,7 @@ module.exports.get_signup_page = function get_signup_page(req, res){
         });
     }
     // returning signup page
-    res.sendFile('/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/html/signup.html');
+    res.sendFile(path.join(__dirname + '/../views/html/signup.html'));
 }
 
 module.exports.get_login_page = function get_login_page(req, res){
@@ -34,7 +35,7 @@ module.exports.get_login_page = function get_login_page(req, res){
         });
     }
     // returning login page
-    res.sendFile('/home/pio/Desktop/coding/github/Student-Dashboard/backend/views/html/login.html');
+    res.sendFile(path.join(__dirname + '/../views/html/login.html'));
 }
 
 async function validateUserData(role, data){
@@ -49,6 +50,8 @@ async function validateUserData(role, data){
                 data.password==undefined ||
                 data.confirmPassword==undefined
             ) return [false, 'An error occured!'];
+            else if(data.email.slice(-14)!='recmainpuri.in') return [false, 'Please signup with your institute email (containing "@recmainpuri.in")'];
+            else if(data.roll_no.length!=13 || data.roll_no.slice(3, 6)!='840') return [false, 'Please enter a valid Roll No.']
             else{
                 let student = await studentModel.findOne({
                     $or: [
@@ -94,6 +97,7 @@ module.exports.signup = async function signup(req, res){
             let data = {
                 'name': req.body.name,
                 'email': req.body.email,
+                'dob': req.body.dob,
                 'roll_no': req.body.roll_no,
                 'branch': req.body.branch,
                 'year': req.body.year,
@@ -102,7 +106,6 @@ module.exports.signup = async function signup(req, res){
             }
             let isUserValid = await validateUserData(role, data);
             if(isUserValid[0]){
-                console.log('-----011111111111111111111110------')
                 let student;
                 try {
                     student = await studentModel.create(data);
@@ -112,7 +115,7 @@ module.exports.signup = async function signup(req, res){
                 if(student){
                     let uid = student['_id'];
                     let token = jwt.sign({ payload: uid }, JWT_KEY);
-                    console.log('[+]', uid, token);
+                    // console.log('[+]', uid, token);
                     res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
                     res.cookie('role', 'student', { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
                     

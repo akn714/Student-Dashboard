@@ -19,11 +19,15 @@ async function sendMail(str, data) {
   if(str=='signup'){
     Osubject = `Thank you for signing ${data.name}`;
     Ohtml = `
-    <h1>Welcome to app.com</h1>
-    Hope you have a good time!
-    Here are your details:
-    Name - ${data.name}
-    Email - ${data.email}`
+    <div>
+      <h1>Welcome to <span style='color:blue'>Student-Dashboard<span></h1>
+      <p>Hope you have a good time!</p>
+      <div>
+        <p>Here are your details:</p>
+        <p>Name - ${data.name}</p>
+        <p>Email - ${data.email}</p>
+      </div>
+    </div>`
   }
   else if(str=='resetpassword'){
     Osubject = 'Reset Password';

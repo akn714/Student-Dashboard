@@ -19,6 +19,7 @@ app.use(express.urlencoded());    // to access data send through html forms
 app.use(cookieParser())
 app.use(express.static('public'));    // static files middleware
 app.use(log)
+app.set('views', __dirname + '/views');
 
 // app.set('view engine', 'ejs');
 // app.set('views', 'views');
@@ -60,7 +61,9 @@ app.get('/', (req, res)=>{
         
         if(!req.cookies.login || !req.cookies.role){
             // redirect to login page
-            return res.redirect('/auth/login');
+            // return res.redirect('/auth/login');
+
+            return res.sendFile(__dirname + '/views/html/temporary.html');
         }
         else{
             // fetching token and role from browser cookies

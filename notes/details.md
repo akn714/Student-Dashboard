@@ -12,7 +12,7 @@
 * 2nd version: user's can visit there profile uisng '/user/profile', this can be done by implementing sessions
 * Faculties tab in students profile
   * There will be information of faculties in the branch in which student is enrolled
-  * Information of faculties along with there profile image, subject, post (optional)
+  * Information of faculties along with there profile image, subject, post (optional, HOD/ Dean/ DSW/ etc.)
 * Internal marks
   * There will be 2 steps to upload students internal marks
   * 1: faculties will enter internal marks of student and save it on the portal

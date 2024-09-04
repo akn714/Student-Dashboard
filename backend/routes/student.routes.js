@@ -17,13 +17,15 @@
 /** PUBLIC ROUTES
  *  /get-avg-cgpa/[year]              -> returns avg. cgpa per year
  *  /get-avg-cgpa/[year]/[branch]     -> returns avg. cgpa per branch in a perticular year
+ *  /get-students
  * 
  */
 
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const student_controller = require('../controllers/student.controller')
+const student_controller = require('../controllers/student.controller');
+const studentModel = require('../models/student.model');
 
 // router.get('/', (req, res)=>{
 //     // redirect to student profile
@@ -32,25 +34,27 @@ const student_controller = require('../controllers/student.controller')
 // })
 
 // public routes
-router.get('/get-avg-cgpa/:year', student_controller.get_avg_cgpa_per_year)
-router.get('/get-avg-cgpa/:year/:branch', student_controller.get_avg_cgpa_per_year_per_branch)
+router.get('/get-avg-cgpa/:year', student_controller.get_avg_cgpa_per_year);
+router.get('/get-avg-cgpa/:year/:branch', student_controller.get_avg_cgpa_per_year_per_branch);
+router.get('/get-students', student_controller.getStudents);
 
 // private routes
-router.use(student_controller.authorize_student)
+router.use(student_controller.authorize_student);
 
-router.get('/', student_controller.profile)
-router.get('/get-data', student_controller.getStudentData)
-router.get('/secrets', student_controller.secrets)
-router.get('/attendence-records', student_controller.attendence_records)
-router.get('/end-sem-result', student_controller.end_sem_result)
-router.get('/assignments', student_controller.assignments)
-router.get('/internal-marks-records', student_controller.internal_marks_records)
 
-router.post('/secrets/add', student_controller.add_secret)
-router.post('/end-sem-result/upload', student_controller.upload_end_sem_result)
+router.get('/', student_controller.profile);
+router.get('/get-data', student_controller.getStudentData);
+router.get('/secrets', student_controller.secrets);
+router.get('/attendence-records', student_controller.attendence_records);
+router.get('/end-sem-result', student_controller.end_sem_result);
+router.get('/assignments', student_controller.assignments);
+router.get('/internal-marks-records', student_controller.internal_marks_records);
 
-router.post('/updateStudentDetails', student_controller.updateStudentDetails)
+router.post('/secrets/add', student_controller.add_secret);
+router.post('/end-sem-result/upload', student_controller.upload_end_sem_result);
 
-module.exports = router
+router.post('/updateStudentDetails', student_controller.updateStudentDetails);
+
+module.exports = router;
 
 
