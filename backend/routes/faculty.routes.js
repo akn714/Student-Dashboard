@@ -5,6 +5,10 @@ const router = express.Router()
 
 // add routes here
 
+/**
+ * PRIVATE
+ */
+
 
 router.use((req, res)=>{
     res.json({

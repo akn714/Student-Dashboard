@@ -30,4 +30,5 @@
     - can update anyone's data
     - can access anyone's profile data except confidential data
     - [creating a telegram bot for managing this portal]
+- [ ] creating student public profile
 

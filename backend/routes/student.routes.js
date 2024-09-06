@@ -37,6 +37,8 @@ const studentModel = require('../models/student.model');
 router.get('/get-avg-cgpa/:year', student_controller.get_avg_cgpa_per_year);
 router.get('/get-avg-cgpa/:year/:branch', student_controller.get_avg_cgpa_per_year_per_branch);
 router.get('/get-students', student_controller.getStudents);
+// public profile of student, anyone can view (used when searching a student)
+router.get('/student/:roll_no', student_controller.getStudentPublicProfile); // implementing getStudentPublicProfile function
 
 // private routes
 router.use(student_controller.authorize_student);
