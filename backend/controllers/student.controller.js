@@ -136,10 +136,34 @@ const secrets = async (req, res) => {
     }
 }
 
-const add_secret = (req, res) => {
-    res.json({
-        message: 'implementation left'
-    })
+// implementation incomplete
+const add_secret = async (req, res) => {
+    try {
+        const id = req.id;
+        const password = req.body.password;
+    
+        const student = await studentModel.findById(id);
+        // implementing encryption and decryption
+        let isValid = await bcrypt.compare(password, student.password);
+        if(isValid){
+            let secrets = req.body.secrets;
+            
+            res.json({
+                message: 'student secrets added',
+                data: student.secrets
+            })
+        }
+        else{
+            res.status(401).json({
+                message: "can't add secrets at the moment"
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: 'some error occured',
+            error: error
+        })
+    }
 }
 
 const attendence_records = async (req, res) => {
