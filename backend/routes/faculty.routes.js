@@ -28,7 +28,7 @@ const router = express.Router()
  *  /faculty/allFaculties/:branch (will list all faculties in a perticular branch)
  *  /
  */
-profile
+// profile
 
 router.use((req, res)=>{
     res.json({

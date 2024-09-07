@@ -23,7 +23,7 @@ function is_faculty_authentic(token){
 }
 
 // middleware to authorize faculty
-const authorize_faculty = async (req, res, next){
+const authorize_faculty = async (req, res, next) => {
     try {
         let token = req.cookies.login;
         let id = is_faculty_authentic(token);
