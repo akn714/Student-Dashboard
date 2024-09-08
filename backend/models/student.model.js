@@ -79,33 +79,15 @@ const studentSchema = mongoose.Schema({
 studentSchema.pre('save', async function(){
     const salt = await bcrypt.genSalt();
     // console.log('[+] salt:', salt);
-    const hashedPassword = bcrypt.hash(this.password, salt);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
     // console.log(`[+] ${hashedPassword} is hashed password for ${this.password}`);
 
     // saving hashed password
     this.password = hashedPassword
+    this.confirmPassword = undefined
 })
-
-// todo: sending this to utility/util.js
-// student keys
-let S_KEYS = {
-    "NAME": "name",
-    "EMAIL": "email",
-    "DOB": "dob",
-    "ROLL_NO": "roll_no",
-    "BRANCH": "branch",
-    "YEAR": "year",
-    "CGPA": "cgpa",
-    "ENROLLMENT_NO": "enrollment_no",
-    "SPGA": "sgpa",
-    "ATTENDENCE": "attendence",
-    "INTERNAL_MARKS_RECORDS": "internal_marks_records"
-}
 
 const studentModel = mongoose.model('studentModel', studentSchema)
 
-module.exports = {
-    "studentModel": studentModel,
-    "S_KEYS": S_KEYS
-}
+module.exports = studentModel
 

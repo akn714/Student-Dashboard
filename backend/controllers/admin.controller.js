@@ -6,8 +6,9 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const bcrypt = require('bcrypt')
 const adminModel = require('../models/admin.model')
-const {studentModel, S_KEYS} = require('../models/student.model')
+const studentModel = require('../models/student.model')
 const facultyModel = require('../models/faculty.model')
+const { S_KEYS, F_KEYS } = require('../utility/util')
 
 dotenv.config();
 let JWT_KEY = process.env.JWT_KEY

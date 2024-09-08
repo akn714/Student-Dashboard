@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser')
 const app = express();
 
 const log = require('./logger');
+const { ROLES, COOKIES, S_KEYS, F_KEYS, COLLEGE } = require('./utility/util')
 
 // mini apps
 const auth_routes = require('./routes/auth.routes');
@@ -34,8 +35,8 @@ app.get('/unauthorised', (req, res)=>{
     // returning a page which displays '401 Unauthorised Accesss!' and below will be a buthon to redirect to login page
     // res.cookie('login', '', { expires: new Date(0), httpOnly: true });
     // res.cookie('role', '', { expires: new Date(0), httpOnly: true });
-    res.clearCookie('login');
-    res.clearCookie('role');
+    res.clearCookie(COOKIES.LOGIN);
+    res.clearCookie(COOKIES.ROLE);
     // res.status(401).json({
     //     message: '401 Unauthorised Access!'
     // })
@@ -71,15 +72,15 @@ app.get('/', (req, res)=>{
             role = req.cookies.role;
         }
         /* -------- if role == 'student' -> authorize person -> redirect to /student -------- */
-        if(role=='student' && is_student_authentic(token)){
+        if(role==ROLES.STUDENT && is_student_authentic(token)){
             res.redirect('/student');
         }
         /* -------- if role == 'faculty' -> authorize person -> redirect to /faculty -------- */
-        else if(role=='faculty' && is_faculty_authentic(token)){
+        else if(role==ROLES.FACULTY && is_faculty_authentic(token)){
             res.redirect('/faculty');
         }
         /* --------   if role == 'admin' -> authorize person -> redirect to /admin   -------- */
-        else if(role=='admin' && is_admin_authentic(token)){
+        else if(role==ROLES.ADMIN && is_admin_authentic(token)){
             res.redirect('/admin');
         }
         else{

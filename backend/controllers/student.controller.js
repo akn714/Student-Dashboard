@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const bcrypt = require('bcrypt')
 const studentModel = require('../models/student.model')
+const { ROLES, COOKIES, S_KEYS, F_KEYS, COLLEGE } = require('../utility/util')
 
 dotenv.config();
 let JWT_KEY = process.env.JWT_KEY
@@ -84,15 +85,15 @@ const getStudentData = async (req, res) => {
         let student = await studentModel.findById(id);
 
         let data = {
-            'name': student.name,
-            'email': student.email,
-            'dob': student.dob,
-            'roll_no': student.roll_no,
-            'branch': student.branch,
-            'year': student.year,
-            'profileImage': student.profileImage,
-            'cgpa': student.cgpa,
-            'enrollment_no': student.enrollment_no
+            'name': student[S_KEYS.NAME],
+            'email': student[S_KEYS.EMAIL],
+            'dob': student[S_KEYS.DOB],
+            'roll_no': student[S_KEYS.ROLL_NO],
+            'branch': student[S_KEYS.BRANCH],
+            'year': student[S_KEYS.YEAR],
+            'profileImage': student[S_KEYS.PROFILE_IMAGE],
+            'cgpa': student[S_KEYS.CGPA],
+            'enrollment_no': student[S_KEYS.ENROLLMENT_NO]
         }
 
         res.json(data);
@@ -172,7 +173,7 @@ const attendence_records = async (req, res) => {
         let id = req.id;
         let student = await studentModel.findById(id);
 
-        // this will return percentage of attendence student had in his previous years
+        // this will return percentage of attendence student had in his previous years (that's why -1)
         // later we will track attendence semester wise
         let attendence = student.attendence[student.year-1];
         if(attendence){
@@ -259,8 +260,8 @@ const get_avg_cgpa_per_year = async (req, res) => {
         // return average cgpa per year
         let year = req.params.year;
         console.log("year", 2);
-        // let student = await studentModel.find({year: year}, 'cpga');
-        let student = await studentModel.find({year: year}, 'name');
+        let student = await studentModel.find({[S_KEYS.YEAR]: year}, S_KEYS.CGPA);
+        // let student = await studentModel.find({[S_KEYS.YEAR]: year}, S_KEYS.NAME);
         if(student){
             return res.status(200).json({
                 message: student
@@ -309,7 +310,7 @@ const updateStudentDetails = async (req, res) => {
 
 const getStudents = async (req, res)=>{
     try {
-        let student = await studentModel.find({}, 'name roll_no branch year');
+        let student = await studentModel.find({}, `${S_KEYS.NAME} ${S_KEYS.ROLL_NO} ${S_KEYS.BRANCH} ${S_KEYS.YEAR}`);
         if(student){
             return res.status(200).json({
                 data: student

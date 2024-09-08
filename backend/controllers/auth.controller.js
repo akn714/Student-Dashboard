@@ -10,9 +10,10 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const path = require('path');
 
-const {studentModel, S_KEYS} = require('../models/student.model');
+const studentModel = require('../models/student.model');
 const facultyModel = require('../models/faculty.model');
 const sendMail = require('../utility/nodemailer');
+const { ROLES, COOKIES, S_KEYS, F_KEYS, COLLEGE } = require('../utility/util')
 const log = require('../logger');
 
 dotenv.config();
@@ -40,7 +41,7 @@ module.exports.get_login_page = function get_login_page(req, res){
 
 async function validateUserData(role, data){
     try{
-        if(role=='student'){
+        if(role==ROLES.STUDENT){
             if(
                 data.name==undefined ||
                 data.email==undefined ||
@@ -50,8 +51,8 @@ async function validateUserData(role, data){
                 data.password==undefined ||
                 data.confirmPassword==undefined
             ) return [false, 'An error occured!'];
-            else if(data.email.slice(-14)!='recmainpuri.in') return [false, 'Please signup with your institute email (consisting "@recmainpuri.in")'];
-            else if(data.roll_no.length!=13 || data.roll_no.slice(3, 6)!='840') return [false, 'Please enter a valid Roll No.']
+            else if(data.email.slice(-14)!=COLLEGE.EMAIL) return [false, `Please signup with your institute email (consisting "@${COLLEGE.EMAIL}")`];
+            else if(data.roll_no.length!=13 || data.roll_no.slice(3, 6)!=COLLEGE.CODE) return [false, 'Please enter a valid Roll No.']
             else{
                 let student = await studentModel.findOne({
                     $or: [
@@ -65,7 +66,7 @@ async function validateUserData(role, data){
                 return [true];
             }
         }
-        else if(roll=='faculty'){
+        else if(roll==ROLES.FACULTY){
             if(
                 data.name==undefined ||
                 data.email==undefined ||
@@ -75,7 +76,7 @@ async function validateUserData(role, data){
             let faculty = await facultyModel.findOne({
                 $or: [
                     // todo: F_KEYS
-                    { 'email': data.email}
+                    { [F_KEYS.EMAIL]: data.email}
                 ]
             });
             if(faculty){
@@ -94,7 +95,7 @@ module.exports.signup = async function signup(req, res){
     try {
         let role = req.body.role;
         console.log('[+]', role);
-        if(role=='student'){
+        if(role==ROLES.STUDENT){
             let data = {
                 [S_KEYS.NAME]: req.body.name,
                 [S_KEYS.EMAIL]: req.body.email,
@@ -117,9 +118,9 @@ module.exports.signup = async function signup(req, res){
                     let uid = student['_id'];
                     let token = jwt.sign({ payload: uid }, JWT_KEY);
                     // console.log('[+]', uid, token);
-                    res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
-                    // 'student' -> ROLL.STUDENT
-                    res.cookie('role', 'student', { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
+                    res.cookie(COOKIES.LOGIN, token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
+                    // todo: 'student' -> ROLL.STUDENT
+                    res.cookie(COOKIES.ROLE, ROLES.STUDENT, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
                     
                     try{
                         await sendMail("signup", student);
@@ -140,7 +141,7 @@ module.exports.signup = async function signup(req, res){
                 })
             }
         }
-        else if(role=='faculty'){
+        else if(role==ROLES.FACULTY){
             // todo
             // let data = {
             //     [F_KEYS.NAME]: req.body.name,
@@ -149,10 +150,10 @@ module.exports.signup = async function signup(req, res){
             //     [F_KEYS.CONFIRM_PASSWORD]: req.body.confirmPassword
             // }
             let data = {
-                'name': req.body.name,
-                'email': req.body.email,
-                'password': req.body.password,
-                'confirmPassword': req.body.confirmPassword
+                [F_KEYS.NAME]: req.body.name,
+                [F_KEYS.EMAIL]: req.body.email,
+                [F_KEYS.PASSWORD]: req.body.password,
+                [F_KEYS.CONFIRM_PASSWORD]: req.body.confirmPassword
             }
             let isUserValid = await validateUserData(role, data);
 
@@ -162,9 +163,9 @@ module.exports.signup = async function signup(req, res){
                     let uid = faculty['_id'];
                     let token = jwt.sign({ payload: uid }, JWT_KEY);
                     console.log('[+]', uid, token);
-                    res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
+                    res.cookie(COOKIES.LOGIN, token, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
                     // todo: 'faculty' -> [ROLE.FACULTY]
-                    res.cookie('role', 'faculty', { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
+                    res.cookie(COOKIES.ROLE, ROLES.FACULTY, { maxAge: 24 * 60 * 60 * 1000, secure: true, httpOnly: true });
         
                     try{
                         sendMail("signup", faculty);
@@ -207,8 +208,8 @@ module.exports.login = async function login(req, res){
         
         let role = req.body.role;
 
-        if(role=='student'){
-            let student = await studentModel.findOne({ 'roll_no': req.body.roll_no });
+        if(role==ROLES.STUDENT){
+            let student = await studentModel.findOne({ [S_KEYS.ROLL_NO]: req.body.roll_no });
             
             
             if(!student) return res.status(404).json({
@@ -219,10 +220,10 @@ module.exports.login = async function login(req, res){
             if(isValid){
                 let uid = student['_id'];
                 let token = jwt.sign({ payload: uid }, JWT_KEY);
-                console.log('[+]', uid, token);
+                // console.log('[+]', uid, token);
                 // todo: COOKIES
-                res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
-                res.cookie('role', 'student', { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+                res.cookie(COOKIES.LOGIN, token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+                res.cookie(COOKIES.ROLE, ROLES.STUDENT, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
                 return res.redirect('/');
                 // return res.json({
@@ -242,8 +243,8 @@ module.exports.login = async function login(req, res){
                 });
             }
         }
-        else if(role=='faculty'){
-            let faculty = await facultyModel.findOne({ 'email': req.body.email });
+        else if(role==ROLES.FACULTY){
+            let faculty = await facultyModel.findOne({ [F_KEYS.EMAIL]: req.body.email });
             
             if(!faculty) return res.status(404).json({
                 message: 'Faculty not found'
@@ -255,15 +256,15 @@ module.exports.login = async function login(req, res){
                 let token = jwt.sign({ payload: uid }, JWT_KEY);
                 console.log('[+]', uid, token);
                 // todo: COOKIES.LOGIN
-                res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
-                res.cookie('role', 'faculty', { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+                res.cookie(COOKIES.LOGIN, token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+                res.cookie(COOKIES.ROLE, ROLES.FACULTY, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
                 return res.json({
                     message: 'faculty has logged in',
                     faculty_details: {
                         // todo: using F_KEYS
-                        'name': faculty.name,
-                        'email': faculty.email
+                        [F_KEYS.NAME]: faculty.name,
+                        [F_KEYS.EMAIL]: faculty.email
                     }
                 });
             }
@@ -273,7 +274,8 @@ module.exports.login = async function login(req, res){
                 });
             }
         }
-        else if(role=='admin'){
+        else if(role==ROLES.ADMIN){
+            // todo
             let admin = await adminModel.findOne({ 'email': req.body.email });
             
             if(!faculty) return res.status(404).json({
@@ -286,8 +288,8 @@ module.exports.login = async function login(req, res){
                 let token = jwt.sign({ payload: uid }, JWT_KEY);
                 console.log('[+]', uid, token);
                 // todo: COOKIES.LOGIN
-                res.cookie('login', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
-                res.cookie('role', 'admin', { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+                res.cookie(COOKIES.LOGIN, token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+                res.cookie(COOKIES.ROLE, ROLES.ADMIN, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 
                 return res.json({
                     message: 'admin has logged in',
@@ -320,8 +322,8 @@ module.exports.logout = (req, res) => {
     try {
         if(req.cookies.login){
             // todo: 'login' -> COOKIES.LOGIN
-            res.clearCookie('login');
-            res.clearCookie('role');
+            res.clearCookie(COOKIES.LOGIN);
+            res.clearCookie(COOKIES.ROLE);
 
             res.redirect('/')
             // res.json({
