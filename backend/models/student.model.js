@@ -86,7 +86,26 @@ studentSchema.pre('save', async function(){
     this.password = hashedPassword
 })
 
+// todo: sending this to utility/util.js
+// student keys
+let S_KEYS = {
+    "NAME": "name",
+    "EMAIL": "email",
+    "DOB": "dob",
+    "ROLL_NO": "roll_no",
+    "BRANCH": "branch",
+    "YEAR": "year",
+    "CGPA": "cgpa",
+    "ENROLLMENT_NO": "enrollment_no",
+    "SPGA": "sgpa",
+    "ATTENDENCE": "attendence",
+    "INTERNAL_MARKS_RECORDS": "internal_marks_records"
+}
+
 const studentModel = mongoose.model('studentModel', studentSchema)
 
-module.exports = studentModel
+module.exports = {
+    "studentModel": studentModel,
+    "S_KEYS": S_KEYS
+}
 
