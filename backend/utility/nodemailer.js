@@ -1,6 +1,6 @@
 "use strict";
-const nodemailer = require("nodemailer");
-const dotenv = require('dotenv')
+import nodemailer from "nodemailer"
+import dotenv from 'dotenv'
 dotenv.config()
 
 // async..await is not allowed in global scope, must use a wrapper

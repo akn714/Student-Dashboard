@@ -1,19 +1,19 @@
-const express = require('express');
-const cookieParser = require('cookie-parser')
-const app = express();
-
-const log = require('./logger');
-const { ROLES, COOKIES, S_KEYS, F_KEYS, COLLEGE } = require('./utility/util')
+// imports
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import log from './logger.js';
+import { ROLES, COOKIES, S_KEYS, F_KEYS, COLLEGE } from './utility/util.js';
 
 // mini apps
-const auth_routes = require('./routes/auth.routes');
-const student_routes = require('./routes/student.routes');
-const faculty_routes = require('./routes/faculty.routes');
-const admin_routes = require('./routes/admin.routes');
+import auth_routes from './routes/auth.routes.js';
+import student_routes from './routes/student.routes.js';
+import faculty_routes from './routes/faculty.routes.js';
+import admin_routes from './routes/admin.routes.js';
 
-const { is_student_authentic } = require('./controllers/student.controller');
-const { is_faculty_authentic } = require('./controllers/faculty.controller');
+import { is_student_authentic } from './controllers/student.controller.js';
+import { is_faculty_authentic } from './controllers/faculty.controller.js';
 
+const app = express();
 
 // middlewares
 app.use(express.urlencoded());    // to access data send through html forms

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
-const bcrypt = require('bcrypt')
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import bcrypt from 'bcrypt'
 
 dotenv.config()
 

@@ -2,13 +2,13 @@
 
 
 // imports
-const jwt = require('jsonwebtoken')
-const dotenv = require('dotenv')
-const bcrypt = require('bcrypt')
-const adminModel = require('../models/admin.model')
-const studentModel = require('../models/student.model')
-const facultyModel = require('../models/faculty.model')
-const { S_KEYS, F_KEYS } = require('../utility/util')
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
+import adminModel from '../models/admin.model';
+import studentModel from '../models/student.model';
+import facultyModel from '../models/faculty.model';
+import { S_KEYS, F_KEYS } from '../utility/util';
 
 dotenv.config();
 let JWT_KEY = process.env.JWT_KEY

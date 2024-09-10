@@ -21,11 +21,11 @@
  * 
  */
 
-const express = require('express');
-const router = express.Router();
+import express from 'express';
+import student_controller from '../controllers/student.controller';
+import studentModel from '../models/student.model';
 
-const student_controller = require('../controllers/student.controller');
-const studentModel = require('../models/student.model');
+const router = express.Router();
 
 // router.get('/', (req, res)=>{
 //     // redirect to student profile

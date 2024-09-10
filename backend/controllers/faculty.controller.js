@@ -1,11 +1,11 @@
 // functions for backend logic of faculty role for every perticular route will be written here
 
 // imports
-const jwt = require('jsonwebtoken')
-const dotenv = require('dotenv')
-const bcrypt = require('bcrypt')
-const studentModel = require('../models/student.model')
-const facultyModel = require('../models/faculty.model')
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
+import studentModel from '../models/student.model';
+import facultyModel from '../models/faculty.model';
 
 dotenv.config();
 let JWT_KEY = process.env.JWT_KEY;

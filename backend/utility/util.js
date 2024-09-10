@@ -57,12 +57,14 @@ let MESSAGE = {
     // adding more meesages
 }
 
-module.exports = {
-    ROLES: ROLES,
-    COOKIES: COOKIES,
-    S_KEYS: S_KEYS,
-    F_KEYS: F_KEYS,
-    COLLEGE: COLLEGE,
-    MESSAGE: MESSAGE
-}
+// ES module syntax of module.exports
+export {
+    ROLES,
+    COOKIES,
+    S_KEYS,
+    F_KEYS,
+    COLLEGE,
+    MESSAGE
+};
+
 
