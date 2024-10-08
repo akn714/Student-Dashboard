@@ -139,6 +139,7 @@ const student_lookup = async (req, res) => {
         let student = studentModel.find({
             $or: [
                 { [S_KEYS.NAME]: key },
+                { [S_KEYS.ROLL_NO]: key },
                 { [S_KEYS.EMAIL]: key },
                 { [S_KEYS.ENROLLMENT_NO]: key }
             ]
@@ -165,7 +166,7 @@ const student_delete = async (req, res) => {
         })
         let deleteItem = studentModel.deleteOne({
             $or: [
-                { [S_KEYS.NAME]: key },
+                { [S_KEYS.ROLL_NO]: key },
                 { [S_KEYS.EMAIL]: key },
                 { [S_KEYS.ENROLLMENT_NO]: key }
             ]
