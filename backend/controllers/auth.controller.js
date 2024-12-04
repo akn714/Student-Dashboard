@@ -5,16 +5,16 @@
 // in the authorize middleware
 
 // imports
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import bcrypt from 'bcrypt';
-import path from 'path';
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+const bcrypt = require('bcrypt');
+const path = require('path');
 
-import studentModel from '../models/student.model';
-import facultyModel from '../models/faculty.model';
-import sendMail from '../utility/nodemailer';
-import { ROLES, COOKIES, S_KEYS, F_KEYS, COLLEGE } from '../utility/util';
-import log from '../logger';
+const studentModel = require('../models/student.model');
+const facultyModel = require('../models/faculty.model');
+const sendMail = require('../utility/nodemailer');
+const { ROLES, COOKIES, S_KEYS, F_KEYS, COLLEGE } = require('../utility/util')
+const log = require('../logger');
 
 dotenv.config();
 let JWT_KEY = process.env.JWT_KEY;

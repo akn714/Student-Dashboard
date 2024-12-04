@@ -3,4 +3,4 @@ function log(req, res, next){
     next();
 }
 
-export default log;
+module.exports = log

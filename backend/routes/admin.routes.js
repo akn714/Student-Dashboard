@@ -1,7 +1,7 @@
 // admin route here
 
-import express from 'express'
-import admin_controller from '../controllers/admin.controller'
+const express = require('express')
+const admin_controller = require('../controllers/admin.controller')
 
 const router = express.Router()
 

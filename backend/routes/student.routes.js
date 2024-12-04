@@ -21,9 +21,9 @@
  * 
  */
 
-import express from 'express';
-import student_controller from '../controllers/student.controller';
-import studentModel from '../models/student.model';
+const express = require('express');
+const student_controller = require('../controllers/student.controller');
+const studentModel = require('../models/student.model');
 
 const router = express.Router();
 

@@ -3,8 +3,8 @@
 // * /signin or /login
 // * /signup or /register (student and faculty seperately)
 
-import express from 'express'
-import authController from '../controllers/auth.controller'
+const express = require('express')
+const authController = require('../controllers/auth.controller')
 
 const router = express.Router()
 
